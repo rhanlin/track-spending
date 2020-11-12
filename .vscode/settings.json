@@ -1,0 +1,31 @@
+{
+  "files.associations": {
+    "*.styl": "stylus",
+    "*.pug": "jade",
+    "*.html": "vue-html"
+  },
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "workbench.iconTheme": "vscode-icons",
+  "stylusSupremacy.insertColons": false,
+  "stylusSupremacy.insertSemicolons": false,
+  "stylusSupremacy.insertBraces": false,
+  "stylusSupremacy.insertNewLineAroundImports": true,
+  "stylusSupremacy.insertNewLineAroundBlocks": true,
+  "stylusSupremacy.quoteChar": "'",
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "vsicons.dontShowNewVersionMessage": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "workbench.editor.closeEmptyGroups": false,
+  "liveServer.settings.donotVerifyTags": true,
+  "editor.formatOnSave": true,
+  "git.confirmSync": false,
+  "editor.fontLigatures": true,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "eslint.validate": ["javascript", "javascriptreact", "vue"],
+  "vetur.validation.template": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
