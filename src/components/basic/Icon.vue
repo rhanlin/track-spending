@@ -26,7 +26,7 @@ export default defineComponent({
 
     const update = computed(() => {
       return `
-        background-image: url(/~/assets/img/${props.name}.svg);
+        background-image: url(./img/${props.name}.svg);
         filter: invert(${state.isDark ? 1 : 0});
       `
     })
