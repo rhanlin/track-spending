@@ -1,12 +1,11 @@
 import path from 'path'
+import { UserConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
-
-module.exports = {
-  // entry: process.env.NODE_ENV === 'production' ? '/track-spending/' : '/',
-  base: '/track-spending/',
-  alias: {
-    '/@/': path.resolve(__dirname, './src'),
-  },
+const alias = {
+  '/~/': path.resolve(__dirname, 'src'),
+}
+const config: UserConfig = {
+  alias,
   plugins: [
     VitePWA({
       manifest: {
@@ -103,5 +102,5 @@ module.exports = {
       },
     }),
   ],
-  // serviceWorker: true,
 }
+export default config

@@ -1,25 +1,33 @@
 <template>
-  <Navbar :icon="Logo" />
-  <div class="container w-full max-w-sm mx-auto mt-8 px-4 font-sans">
-    <router-view v-show="!state.isLoading" />
+  <div class="flex relative h-screen px-4 text-gray-700 dark:text-gray-200">
+    <router-view class="view" v-show="!state.isLoading" />
+    <Footer />
   </div>
 </template>
 <script lang="ts">
-import Logo from '/@/assets/img/logo-inverted.svg'
-import Navbar from '/@/components/Navbar.vue'
-
+import { watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { State } from '../store'
-
+import Footer from '/~/components/Footer.vue'
 export default {
   name: 'DefaultLayout',
   components: {
-    Navbar,
+    Footer,
   },
   setup() {
     const { state } = useStore<State>()
+    const isDark = computed(() => state.isDark)
+    watch(
+      isDark,
+      (v: boolean) => {
+        console.log('theme mode', isDark.value)
+        document.documentElement.classList.toggle('dark', v)
+      },
+      {
+        immediate: true,
+      },
+    )
     return {
-      Logo,
       state,
     }
   },

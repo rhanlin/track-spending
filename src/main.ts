@@ -1,10 +1,11 @@
+import './main.postcss'
+import 'normalize-css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import store from './store'
 import router from './router'
-import 'normalize-css'
-import './index.css'
 import globalComponents from './components'
+
 const app = createApp(App)
 
 app.use(store)

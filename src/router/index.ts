@@ -1,8 +1,5 @@
-// import Vue from 'vue'
-// import VueRouter from 'vue-router'
 import DefaultLayout from '../layout/DefaultLayout.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-// Vue.use(VueRouter)
 
 const routes = [
   {
@@ -24,6 +21,12 @@ const routes = [
         meta: {
           title: '報表',
         },
+      },
+      {
+        path: '/hi/:name',
+        name: '_name',
+        component: () => import('../views/hi/_name.vue'),
+        props: true,
       },
     ],
   },

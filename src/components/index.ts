@@ -4,11 +4,8 @@ import Error from './basic/Error.vue'
 import Text from './basic/Text.vue'
 import Textarea from './basic/Textarea.vue'
 import Toast from './basic/Toast.vue'
+import Icon from './basic/Icon.vue'
 import { Component } from 'vue'
-
-// export default { Select, Input, Error, Text, Textarea } as {
-//   [key: string]: DefineComponent
-// }
 
 const globalComponents: { [key: string]: Component } = {
   Select,
@@ -17,6 +14,7 @@ const globalComponents: { [key: string]: Component } = {
   Text,
   Textarea,
   Toast,
+  Icon,
 }
 
 export default globalComponents
