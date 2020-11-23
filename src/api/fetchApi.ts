@@ -1,6 +1,3 @@
-import { useStore } from 'vuex'
-import { State } from '../store'
-
 export interface postBody {
   name: string
   date: string
@@ -11,10 +8,7 @@ export interface postBody {
 }
 
 export const getData = async (url: string) => {
-  const { dispatch } = useStore<State>()
-
   try {
-    dispatch('onSetIsLoading', true)
     const response = await fetch(url)
     const { type } = await response.json()
     // console.log('type', type)
@@ -25,11 +19,7 @@ export const getData = async (url: string) => {
 }
 
 export const postData = async (url: string, body: postBody) => {
-  // const { dispatch } = useStore<State>()
   try {
-    // dispatch('onSetIsLoading', true)
-    // console.log('body', body)
-
     const Options = {
       method: 'POST',
       body: JSON.stringify(body),

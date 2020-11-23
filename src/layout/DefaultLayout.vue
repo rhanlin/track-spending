@@ -1,6 +1,7 @@
 <template>
   <div class="flex relative h-screen px-4 text-gray-700 dark:text-gray-200">
-    <router-view class="view" v-show="!state.isLoading" />
+    <Loading :isLoading="state.isLoading" />
+    <router-view class="view" />
     <Footer />
   </div>
 </template>
@@ -8,10 +9,12 @@
 import { watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { State } from '../store'
+import Loading from '/~/components/Loading.vue'
 import Footer from '/~/components/Footer.vue'
 export default {
   name: 'DefaultLayout',
   components: {
+    Loading,
     Footer,
   },
   setup() {

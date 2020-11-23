@@ -172,6 +172,8 @@ export default defineComponent({
     })
     const methods = {
       submit() {
+        dispatch('onSetIsLoading', true)
+
         postData(GOOGLE_SHEET_URL, data.form)
           .then(response => {
             // console.log('response', response)
@@ -186,6 +188,7 @@ export default defineComponent({
             }
           })
           .then(() => {
+            dispatch('onSetIsLoading', false)
             data.toast = {
               message: '成功記帳囉！',
               isShow: true,
@@ -193,6 +196,7 @@ export default defineComponent({
             }
           })
           .catch(() => {
+            dispatch('onSetIsLoading', false)
             data.toast = {
               message: '出現異常，請稍後再試',
               isShow: true,
@@ -209,9 +213,6 @@ export default defineComponent({
         }))
         data.form.kind_child = data.child_options[0].value
       },
-      test(e: any) {
-        console.log('distroy', e)
-      },
     }
     const stopWatchEffect = watchEffect(() => {
       // watchEffect 回傳一個停止監聽的函式
@@ -224,7 +225,7 @@ export default defineComponent({
     onMounted(() => {
       const userName = localStorage.getItem('user')
       if (!userName) router.push('/')
-
+      dispatch('onSetIsLoading', true)
       getData(GOOGLE_SHEET_URL)
         .then((response: GoogleSheetAPIResponse) => {
           // console.log(response)

@@ -14,7 +14,7 @@ import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 import { State } from '../../store'
 export default defineComponent({
-  name: 'SvgIcon',
+  name: 'Icon',
   props: {
     name: {
       type: String,
@@ -26,7 +26,7 @@ export default defineComponent({
 
     const update = computed(() => {
       return `
-        background-image: url(./img/${props.name}.svg);
+        background-image: url(../img/${props.name}.svg);
         filter: invert(${state.isDark ? 1 : 0});
       `
     })
