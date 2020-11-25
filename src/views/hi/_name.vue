@@ -36,10 +36,6 @@
 </template>
 
 <script lang="ts">
-/**
- * @param {string} defaultDay 預設時間為當日
- * @param {string} GOOGLE_SHEET_URL google api
- */
 import {
   onMounted,
   reactive,
@@ -50,13 +46,8 @@ import {
 } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { getData, postData } from '../../api/fetchApi'
-import { useStore } from 'vuex'
-import { State } from '../../store'
+import { useState } from '../../store/index'
 import bus from '../../bus'
-
-// declare const props: {
-//   name: string
-// }
 
 const defaultDay = new Date().toISOString().split('T')[0]
 const GOOGLE_SHEET_URL =
@@ -108,7 +99,10 @@ type SelectOption<T> = {
 export default defineComponent({
   name: 'index',
   setup(props, { attrs }) {
-    const { dispatch } = useStore<State>()
+    const state = useState()
+    function updateLoadingState(val: boolean) {
+      state.updateLoading(val)
+    }
     const { meta } = useRoute()
     const router = useRouter()
     const data: HomepageState = reactive({
@@ -172,11 +166,10 @@ export default defineComponent({
     })
     const methods = {
       submit() {
-        dispatch('onSetIsLoading', true)
+        updateLoadingState(true)
 
         postData(GOOGLE_SHEET_URL, data.form)
           .then(response => {
-            // console.log('response', response)
             // reset
             data.form = {
               name: response.name,
@@ -188,7 +181,7 @@ export default defineComponent({
             }
           })
           .then(() => {
-            dispatch('onSetIsLoading', false)
+            updateLoadingState(false)
             data.toast = {
               message: '成功記帳囉！',
               isShow: true,
@@ -196,7 +189,7 @@ export default defineComponent({
             }
           })
           .catch(() => {
-            dispatch('onSetIsLoading', false)
+            updateLoadingState(false)
             data.toast = {
               message: '出現異常，請稍後再試',
               isShow: true,
@@ -225,11 +218,9 @@ export default defineComponent({
     onMounted(() => {
       const userName = localStorage.getItem('user')
       if (!userName) router.push('/')
-      dispatch('onSetIsLoading', true)
+      updateLoadingState(true)
       getData(GOOGLE_SHEET_URL)
         .then((response: GoogleSheetAPIResponse) => {
-          // console.log(response)
-
           data.optionData = response
 
           for (let key in response) {
@@ -244,13 +235,12 @@ export default defineComponent({
           }
         })
         .then(() => {
-          dispatch('onSetIsLoading', false)
+          updateLoadingState(false)
           data.form.kind_parent = data.parent_options[0].value
         })
     })
     onUnmounted(() => {
       stopWatchEffect()
-      // bus.off('submit')
     })
     return {
       ...toRefs(data),

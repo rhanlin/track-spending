@@ -2,13 +2,13 @@ import './main.postcss'
 import 'normalize-css'
 import { createApp } from 'vue'
 import App from './App.vue'
-import store from './store'
+import { stateSymbol, createState } from './store/index'
 import router from './router'
 import globalComponents from './components'
 
 const app = createApp(App)
 
-app.use(store)
+app.provide(stateSymbol, createState())
 app.use(router)
 
 // Global components registered

@@ -4,9 +4,9 @@
   >
     <button
       class="icon-btn mx-2 flex-1 focus:outline-none text-white font-bold"
-      @click="changeColor(isDark)"
+      @click="upadte(state.colorMode)"
     >
-      <Icon :name="isDark ? 'light' : 'dark'" class="h-7 w-7 m-auto" />
+      <Icon :name="state.colorMode" class="h-7 w-7 m-auto" />
     </button>
     <button
       class="icon-btn mx-2 flex-1 focus:outline-none dark:text-white text-black font-bold "
@@ -25,25 +25,30 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue'
-import { useStore } from 'vuex'
-import { State } from '../store'
+import { defineComponent } from 'vue'
+import { useState, ThemeMode } from '../store/index'
 import { useRouter } from 'vue-router'
 import bus from '../bus'
-export default {
+
+export default defineComponent({
   setup() {
-    const { state, dispatch } = useStore<State>()
-    const isDark = computed(() => state.isDark)
+    const state = useState()
     const router = useRouter()
+
+    const upadte = (mode: ThemeMode) => {
+      if (mode === ThemeMode.dark) {
+        state.updateColorMode(ThemeMode.light)
+      } else {
+        state.updateColorMode(ThemeMode.dark)
+      }
+    }
+
     function back() {
       localStorage.clear()
       router.push('/')
     }
-    function changeColor(isDark: boolean) {
-      dispatch('onSetColorSchema', !isDark)
-    }
+
     function busSubmit($route: any) {
-      // console.log('route', $route.name)
       const routeName = $route.name
       switch (routeName) {
         case 'index':
@@ -54,12 +59,13 @@ export default {
           break
       }
     }
+
     return {
-      isDark,
+      state,
       back,
-      changeColor,
+      upadte,
       busSubmit,
     }
   },
-}
+})
 </script>

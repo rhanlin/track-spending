@@ -1,25 +1,27 @@
 <template>
   <div class="flex relative h-screen px-4 text-gray-700 dark:text-gray-200">
-    <Loading :isLoading="state.isLoading" />
+    <Loading :isLoading="state.loading" />
     <router-view class="view" />
     <Footer />
   </div>
 </template>
 <script lang="ts">
-import { watch, computed } from 'vue'
-import { useStore } from 'vuex'
-import { State } from '../store'
+import { defineComponent, watch, computed } from 'vue'
+import { useState, ThemeMode } from '../store/index'
 import Loading from '/~/components/Loading.vue'
 import Footer from '/~/components/Footer.vue'
-export default {
+
+export default defineComponent({
   name: 'DefaultLayout',
   components: {
     Loading,
     Footer,
   },
   setup() {
-    const { state } = useStore<State>()
-    const isDark = computed(() => state.isDark)
+    const state = useState()
+    const isDark = computed(() =>
+      state.colorMode === ThemeMode.dark ? true : false,
+    )
     watch(
       isDark,
       (v: boolean) => {
@@ -34,5 +36,5 @@ export default {
       state,
     }
   },
-}
+})
 </script>

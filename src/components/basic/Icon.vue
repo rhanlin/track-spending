@@ -4,15 +4,13 @@
     class="bg-contain bg-no-repeat bg-center"
     :class="$attrs.class"
     :style="update"
-  >
-    <!-- <svg><use :xlink:href="`#${name}`" /></svg> -->
-  </div>
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useStore } from 'vuex'
-import { State } from '../../store'
+import { useState, ThemeMode } from '../../store/index'
+
 export default defineComponent({
   name: 'Icon',
   props: {
@@ -22,12 +20,11 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { state } = useStore<State>()
-
+    const state = useState()
     const update = computed(() => {
       return `
         background-image: url(../img/${props.name}.svg);
-        filter: invert(${state.isDark ? 1 : 0});
+        filter: invert(${state.colorMode === ThemeMode.dark ? 1 : 0});
       `
     })
     return {
