@@ -15,18 +15,27 @@
     >
       Go!
     </button>
+
     <button
+      v-if="state.userName"
       class="icon-btn mx-2 flex-1 focus:outline-none text-white font-bold"
       @click="goReportPage"
     >
       <Icon name="data" class="h-7 w-7 m-auto" />
+    </button>
+    <button
+      v-else
+      class="icon-btn mx-2 flex-1 focus:outline-none text-white font-bold"
+      @click="upadteColorMode(state.colorMode)"
+    >
+      <Icon :name="state.colorMode" class="h-7 w-7 m-auto" />
     </button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useState } from '../store/index'
+import { useState, ThemeMode } from '../store/index'
 import { useRouter } from 'vue-router'
 import bus from '../bus'
 
@@ -51,10 +60,19 @@ export default defineComponent({
       }
     }
 
+    const upadteColorMode = (mode: ThemeMode) => {
+      if (mode === ThemeMode.dark) {
+        state.updateColorMode(ThemeMode.light)
+      } else {
+        state.updateColorMode(ThemeMode.dark)
+      }
+    }
+
     return {
       state,
       busSubmit,
       goReportPage,
+      upadteColorMode,
     }
   },
 })
