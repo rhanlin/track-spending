@@ -1,12 +1,12 @@
 <template>
   <div
-    class="text-xl mt-6 fixed inset-x-0 bottom-0 z-10 py-3 flex text-center dark:bg-gray-700 bg-gray-200 "
+    class="text-xl mt-6 fixed inset-x-0 bottom-0 z-10 py-3 flex text-center dark:bg-gray-700 bg-gray-200"
   >
     <button
       class="icon-btn mx-2 flex-1 focus:outline-none text-white font-bold"
-      @click="upadte(state.colorMode)"
+      @click="$emit('update:isOpen')"
     >
-      <Icon :name="state.colorMode" class="h-7 w-7 m-auto" />
+      <Icon name="more" class="h-7 w-7 m-auto" />
     </button>
     <button
       class="icon-btn mx-2 flex-1 focus:outline-none dark:text-white text-black font-bold "
@@ -17,16 +17,16 @@
     </button>
     <button
       class="icon-btn mx-2 flex-1 focus:outline-none text-white font-bold"
-      @click="back"
+      @click="goReportPage"
     >
-      <Icon name="logout" class="h-7 w-7 m-auto" />
+      <Icon name="data" class="h-7 w-7 m-auto" />
     </button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useState, ThemeMode } from '../store/index'
+import { useState } from '../store/index'
 import { useRouter } from 'vue-router'
 import bus from '../bus'
 
@@ -35,17 +35,8 @@ export default defineComponent({
     const state = useState()
     const router = useRouter()
 
-    const upadte = (mode: ThemeMode) => {
-      if (mode === ThemeMode.dark) {
-        state.updateColorMode(ThemeMode.light)
-      } else {
-        state.updateColorMode(ThemeMode.dark)
-      }
-    }
-
-    function back() {
-      localStorage.clear()
-      router.push('/')
+    const goReportPage = () => {
+      router.push(`/report`)
     }
 
     function busSubmit($route: any) {
@@ -62,9 +53,8 @@ export default defineComponent({
 
     return {
       state,
-      back,
-      upadte,
       busSubmit,
+      goReportPage,
     }
   },
 })

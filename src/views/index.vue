@@ -25,21 +25,25 @@
 <script lang="ts">
 import { ref, onMounted, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
+import { useState } from '../store/index'
 import bus from '../bus'
 
 export default defineComponent({
   setup() {
+    const state = useState()
+
     const router = useRouter()
     const name = ref('')
     const go = () => {
       if (name.value) {
         router.push(`/hi/${name.value}`)
         localStorage.setItem('user', name.value)
+        state.updateUserName(name.value)
       }
     }
     bus.on('submit:name', () => go())
     onMounted(() => {
-      const userName = localStorage.getItem('user')
+      const userName = state.userName
       if (userName) router.push(`/hi/${userName}`)
     })
 

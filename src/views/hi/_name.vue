@@ -44,7 +44,7 @@ import {
   watchEffect,
   onUnmounted,
 } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { getData, postData } from '../../api/fetchApi'
 import { useState } from '../../store/index'
 import bus from '../../bus'
@@ -103,7 +103,6 @@ export default defineComponent({
     function updateLoadingState(val: boolean) {
       state.updateLoading(val)
     }
-    const { meta } = useRoute()
     const router = useRouter()
     const data: HomepageState = reactive({
       form: {
@@ -216,7 +215,7 @@ export default defineComponent({
       methods.submit()
     })
     onMounted(() => {
-      const userName = localStorage.getItem('user')
+      const userName = state.userName
       if (!userName) router.push('/')
       updateLoadingState(true)
       getData(GOOGLE_SHEET_URL)
@@ -245,8 +244,7 @@ export default defineComponent({
     return {
       ...toRefs(data),
       ...methods,
-      meta,
-      name: attrs.name,
+      name: state.userName,
     }
   },
 })

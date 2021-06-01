@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 module.exports = {
   purge: {
     enabled: process.env.NODE_ENV === 'production',
@@ -24,6 +22,9 @@ module.exports = {
     borderColor: ['dark', 'active', 'focus', 'disabled'],
     textColor: ['dark', 'hover', 'active', 'disabled'],
     opacity: ['dark', 'hover', 'active', 'focus', 'disabled'],
+    extend: {
+      zIndex: ['footer', 'nav'],
+    },
   },
   future: {
     purgeLayersByDefault: true,
