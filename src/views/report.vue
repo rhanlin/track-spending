@@ -69,10 +69,8 @@ export default defineComponent({
 
       const queryBody = {
         name: userName,
-        // year: new Date().getFullYear(),
-        // month: new Date().getMonth() + 1,
-        year: 2020,
-        month: 11,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
       }
       postData(`${GOOGLE_SHEET_URL}?queryType=record`, queryBody)
         .then((response: any) => {
