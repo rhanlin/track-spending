@@ -1,5 +1,5 @@
 <template>
-  <div class="flex relative h-screen  text-gray-700 dark:text-gray-200">
+  <div class="relative h-screen w-full text-gray-700 dark:text-gray-200">
     <Loading :isLoading="state.loading" />
     <Navigation :isOpen="navIsOpen" @logout="back" @close="navIsOpen = false" />
     <router-view class="view" />

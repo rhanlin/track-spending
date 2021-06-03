@@ -218,7 +218,7 @@ export default defineComponent({
       const userName = state.userName
       if (!userName) router.push('/')
       updateLoadingState(true)
-      getData(GOOGLE_SHEET_URL)
+      getData(`${GOOGLE_SHEET_URL}?queryType=type`)
         .then((response: GoogleSheetAPIResponse) => {
           data.optionData = response
 

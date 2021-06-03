@@ -1,10 +1,12 @@
 export interface postBody {
   name: string
-  date: string
-  cost: number
-  kind_parent: string
-  kind_child: string
-  remark: string
+  date?: string
+  cost?: number
+  kind_parent?: string
+  kind_child?: string
+  remark?: string
+  year?: number
+  month?: number
 }
 
 export const getData = async (url: string) => {
@@ -13,8 +15,8 @@ export const getData = async (url: string) => {
     const { type } = await response.json()
     // console.log('type', type)
     return type
-  } catch {
-    throw new Error('fetch google api fail')
+  } catch (error) {
+    throw new Error(`fetch google api fail:>>> ${error}`)
   }
 }
 
@@ -28,7 +30,7 @@ export const postData = async (url: string, body: postBody) => {
     const { data } = await response.json()
 
     return data
-  } catch {
-    throw new Error('fetch google api fail')
+  } catch (error) {
+    throw new Error(`fetch google api fail:>>> ${error}`)
   }
 }
