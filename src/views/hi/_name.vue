@@ -156,8 +156,6 @@ export default defineComponent({
       methods.submit()
     })
     onMounted(() => {
-      console.log(3)
-
       const userName = state.userName
       if (!userName) router.push('/')
 

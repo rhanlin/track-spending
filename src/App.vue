@@ -13,7 +13,6 @@ import { GoogleSheetAPIResponse } from './type/response'
 
 export default defineComponent({
   setup() {
-    console.log(0)
     const state = useState()
     const data = reactive({
       inited: false,
@@ -23,7 +22,6 @@ export default defineComponent({
     if (data.isCategoryNull) {
       getData(`${GOOGLE_SHEET_URL}?queryType=type`).then(
         (response: GoogleSheetAPIResponse) => {
-          console.log(1, response)
           state.updateOptionData(response)
           data.inited = true
         },

@@ -26,7 +26,7 @@ export class State {
     this.userName = val
   }
   updateOptionData(val: GoogleSheetAPIResponse) {
-    console.log(1), setCategoryOptions(val)
+    setCategoryOptions(val)
     this.optionData = val
   }
 

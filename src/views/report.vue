@@ -56,7 +56,10 @@ import { useState } from '../store/index'
 import { useRouter } from 'vue-router'
 import { postData } from '../api/fetchApi'
 import Record from '../components/form/Record.vue'
-import { GoogleSheetAPIRecordResponse } from '../type/response'
+import {
+  GoogleSheetAPIRecordResponse,
+  GoogleSheetAPIResponse,
+} from '../type/response'
 const GOOGLE_SHEET_URL =
   'https://script.google.com/macros/s/AKfycbxgyM5XPLleto9N400wDAGO3Q8SJRuB48ZKmqsK/exec'
 interface ReportPageState {
@@ -79,6 +82,15 @@ export default defineComponent({
       record: [],
       columns: ['日期', '大分類', '小分類', '花費'],
     })
+    const bigCategoryHandler = (val: keyof GoogleSheetAPIResponse) => {
+      const keys = Object.keys(state.optionData!)
+      const currentKey = keys.find(key => key === val) as
+        | keyof GoogleSheetAPIResponse
+        | undefined
+      if (!currentKey) return '查無類別'
+
+      return state.optionData![currentKey].name
+    }
     const init = () => {
       const userName = state.userName
       if (!userName) router.push('/')
@@ -98,7 +110,7 @@ export default defineComponent({
           data.record = record.map(item => ({
             rowData: [
               item.date,
-              item.bigCategory,
+              bigCategoryHandler(item.bigCategory),
               item.smallCategory,
               item.spend,
             ],
