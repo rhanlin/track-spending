@@ -1,5 +1,5 @@
 import { reactive, provide, inject } from 'vue'
-import { getUserName, logout } from '../util/user'
+import { setUserName, getUserName, logout } from '../util/user'
 import { setCategoryOptions, getCategoryOptions } from '../util/category'
 import { GoogleSheetAPIResponse } from '../type/response'
 
@@ -23,6 +23,7 @@ export class State {
     this.colorMode = mode
   }
   updateUserName(val: string) {
+    setUserName(val)
     this.userName = val
   }
   updateOptionData(val: GoogleSheetAPIResponse) {

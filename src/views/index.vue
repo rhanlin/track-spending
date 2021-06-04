@@ -47,7 +47,6 @@ export default defineComponent({
     const go = () => {
       if (name.value) {
         router.push(`/hi/${name.value}`)
-        localStorage.setItem('user', name.value)
         state.updateUserName(name.value)
       }
     }

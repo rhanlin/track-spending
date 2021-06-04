@@ -1,5 +1,5 @@
 import Select from './basic/Select.vue'
-import Input from './basic/Input.vue'
+import BasicInput from './basic/Input.vue'
 import Error from './basic/Error.vue'
 import Text from './basic/Text.vue'
 import Textarea from './basic/Textarea.vue'
@@ -9,7 +9,7 @@ import { Component } from 'vue'
 
 const globalComponents: { [key: string]: Component } = {
   Select,
-  Input,
+  BasicInput,
   Error,
   Text,
   Textarea,

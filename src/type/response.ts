@@ -23,6 +23,7 @@ export interface GoogleSheetAPIResponse {
   other: CategoryContent
   'self-invest': CategoryContent
   traffic: CategoryContent
+  income: CategoryContent
 }
 
 export interface GoogleSheetAPIRecordResponse {

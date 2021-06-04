@@ -17,7 +17,7 @@
           :key="col"
           tag="h3"
           size="base"
-          class="col-span-3 text-center mb-2 dark:text-white font-bold"
+          class="multiline-ellipsis col-span-3 text-center mb-2 dark:text-white font-bold"
         >
           {{ col }}
         </Text>
@@ -28,6 +28,7 @@
           :key="index"
           :rowData="item.rowData"
           :note="item.note"
+          :isNegative="item.isNegative"
         />
       </template>
       <template v-else>
@@ -41,6 +42,20 @@
           </Text>
         </div>
       </template>
+
+      <div class="mt-8 flex items-baseline justify-end">
+        <Text tag="h5" size="base" class="text-center mr-3  dark:text-gray-300">
+          花費總計:
+        </Text>
+        <Text
+          tag="h3"
+          size="4xl"
+          class="text-center font-bold"
+          :class="counter <= 0 ? 'text-red-600' : 'text-blue-600'"
+        >
+          {{ counter }}
+        </Text>
+      </div>
     </div>
     <!-- <Toast
       v-if="toast.isShow"
@@ -51,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, reactive, toRefs } from 'vue'
+import { onMounted, defineComponent, reactive, toRefs, computed } from 'vue'
 import { useState } from '../store/index'
 import { useRouter } from 'vue-router'
 import { postData } from '../api/fetchApi'
@@ -65,6 +80,7 @@ const GOOGLE_SHEET_URL =
 interface ReportPageState {
   year: number
   month: number
+  counter: number
   record: any
   columns: string[]
 }
@@ -79,8 +95,9 @@ export default defineComponent({
     const data: ReportPageState = reactive({
       year: 0,
       month: 0,
+      counter: 0,
       record: [],
-      columns: ['日期', '大分類', '小分類', '花費'],
+      columns: ['日期', '大分類', '小分類', '金額'],
     })
     const bigCategoryHandler = (val: keyof GoogleSheetAPIResponse) => {
       const keys = Object.keys(state.optionData!)
@@ -110,12 +127,19 @@ export default defineComponent({
           data.record = record.map(item => ({
             rowData: [
               item.date,
-              bigCategoryHandler(item.bigCategory),
+              bigCategoryHandler(
+                item.bigCategory as keyof GoogleSheetAPIResponse,
+              ),
               item.smallCategory,
-              item.spend,
+              Math.abs(item.spend),
             ],
             note: item.note,
+            isNegative: Boolean(Number(item.spend) <= 0),
           }))
+          data.counter = record.reduce((accumulate, current) => {
+            accumulate += current.spend
+            return accumulate
+          }, 0)
         })
         .then(() => {
           updateLoadingState(false)

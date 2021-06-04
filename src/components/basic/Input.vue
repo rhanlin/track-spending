@@ -4,11 +4,9 @@
     :data-is-disabled="isDisabled"
     :data-is-error="isError"
   >
-    <label class="block text-gray-500 font-medium text-sm mb-2">
-      {{ title }}
-    </label>
     <input
-      class="
+      :class="
+        `basic-input__text
         appearance-none 
         border-2 
         rounded 
@@ -16,15 +14,16 @@
         py-2 
         px-4 
         leading-tight 
-        bg-gray-200 
-        text-gray-700 
+        bg-gray-200
         border-gray-200 
         focus:outline-none 
         focus:bg-white 
         focus:border-purple-500
-        "
+        ${color}`
+      "
       :type="type"
       :value="value"
+      :pattern="patternHandler"
       :maxlength="maxLength"
       :disabled="isDisabled"
       :placeholder="placeholder"
@@ -39,9 +38,9 @@
 
 <script>
 import Error from '../basic/Error.vue'
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 export default defineComponent({
-  name: 'Input',
+  name: 'BasicInput',
   components: {
     Error,
   },
@@ -50,9 +49,9 @@ export default defineComponent({
       type: [String, Number, Object, Array],
       default: '',
     },
-    title: {
+    color: {
       type: String,
-      default: '',
+      default: 'text-gray-700',
     },
     isError: {
       type: Boolean,
@@ -155,10 +154,55 @@ export default defineComponent({
         emit('enter')
       },
     }
+    const patternHandler = computed(() => {
+      return `${props.type === 'number' ? '\\d*' : ''}`
+    })
 
     return {
       ...methods,
+      patternHandler,
     }
   },
 })
 </script>
+
+<style scoped>
+.basic-input {
+  position: relative;
+  width: 100%;
+}
+.input[data-is-disabled='true'] .input__text {
+  border: none;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #bfbfbf;
+}
+.input[data-is-disabled='true'] .input__icon {
+  display: none;
+}
+.input__prefix {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.input__suffix {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  right: 0;
+  top: 0;
+}
+.input[data-is-error='true'] .input__text {
+  border-color: var(--error);
+  color: var(--error);
+}
+.input[data-is-error='true'] .input__text::placeholder {
+  color: var(--error);
+}
+</style>

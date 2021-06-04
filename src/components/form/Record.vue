@@ -4,8 +4,9 @@
       border-b border-clc-black border-opacity-25
       w-full py-2
     "
+    :class="isNegative ? 'bg-red-600' : 'bg-blue-600'"
   >
-    <div class="grid grid-cols-12 gap-6 ">
+    <div class="grid grid-cols-12 gap-6">
       <Text
         v-for="row in rowData"
         :key="row"
@@ -41,6 +42,10 @@ export default defineComponent({
     note: {
       type: String,
       default: '',
+    },
+    isNegative: {
+      type: Boolean,
+      default: true,
     },
   },
 })

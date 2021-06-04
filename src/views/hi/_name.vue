@@ -11,13 +11,64 @@
       >
         {{ 'Hi !, ' + name }}
       </Text>
-      <Input title="日期" type="date" v-model:value="form.date" />
-      <Input
-        title="金額"
-        type="number"
-        text-type="number"
-        v-model:value="form.cost"
-      />
+      <div>
+        <Text
+          tag="label"
+          size="sm"
+          class="block text-gray-500 font-medium text-sm mb-2"
+        >
+          日期
+        </Text>
+        <BasicInput type="date" v-model:value="form.date" />
+      </div>
+      <div>
+        <Text
+          tag="label"
+          size="sm"
+          class="block text-gray-500 font-medium text-sm mb-2"
+          :color="form.isNegative ? 'text-red-600' : 'text-red-600'"
+        >
+          {{ `金額${form.isNegative ? '(支出)' : '(收入)'}` }}
+        </Text>
+        <BasicInput
+          type="number"
+          text-type="number"
+          v-model:value="form.cost"
+          class="col-span-4"
+          :color="form.isNegative ? 'text-red-600' : 'text-blue-600'"
+        >
+          <template v-if="form.isNegative" v-slot:prefix="">
+            <Text
+              tag="label"
+              size="sm"
+              class="block text-red-600 text-sm ml-2 mb-1"
+            >
+              -
+            </Text>
+          </template>
+          <template v-slot:suffix="">
+            <button
+              class="icon-btn px-3 py-1 mx-1 flex-1 rounded-lg
+              focus:outline-none text-white font-bold"
+              :class="form.isNegative ? 'bg-red-600' : 'bg-red-300'"
+              type="button"
+              @click.prevent="isNegativeHandler(true)"
+            >
+              —
+            </button>
+            <button
+              class="icon-btn px-3 py-1 mx-1 mr-2 flex-1 rounded-lg 
+              focus:outline-none text-white font-bold"
+              :class="!form.isNegative ? 'bg-blue-600' : 'bg-blue-300'"
+              type="button"
+              @click.prevent="isNegativeHandler(false)"
+            >
+              ＋
+            </button>
+          </template>
+        </BasicInput>
+      </div>
+
       <Select
         title="分類"
         :selectOptions="parent_options"
@@ -28,7 +79,7 @@
         :selectOptions="child_options"
         v-model:value="form.kind_child"
       />
-      <Textarea title="remark" v-model:value="form.remark" />
+      <Textarea title="註記" v-model:value="form.remark" />
     </div>
     <Toast
       v-if="toast.isShow"
@@ -62,6 +113,7 @@ interface HomepageState {
     name: string | ''
     date: string
     cost: number
+    isNegative: boolean
     kind_parent: keyof GoogleSheetAPIResponse | ''
     kind_child: keyof GoogleSheetAPIResponse | ''
     remark: string
@@ -93,6 +145,7 @@ export default defineComponent({
         name: typeof attrs.name === 'string' ? attrs.name : '',
         date: defaultDay,
         cost: 0,
+        isNegative: true, // 支出
         kind_parent: '',
         kind_child: '',
         remark: '',
@@ -105,21 +158,26 @@ export default defineComponent({
         isError: false,
       },
     })
+    const resetForm = (name: string) => {
+      // reset
+      data.form = {
+        name: name,
+        date: defaultDay,
+        cost: 0,
+        isNegative: true,
+        kind_parent: data.parent_options[0].value,
+        kind_child: '',
+        remark: '',
+      }
+    }
     const methods = {
       submit() {
+        if (data.form.cost === 0) return
         updateLoadingState(true)
 
         postData(GOOGLE_SHEET_URL, data.form)
           .then(response => {
-            // reset
-            data.form = {
-              name: response.name,
-              date: defaultDay,
-              cost: 0,
-              kind_parent: data.parent_options[0].value,
-              kind_child: '',
-              remark: '',
-            }
+            resetForm(response.name)
           })
           .then(() => {
             updateLoadingState(false)
@@ -146,11 +204,20 @@ export default defineComponent({
         }))
         data.form.kind_child = data.child_options[0].value
       },
+      isNegativeHandler(val: boolean) {
+        // 如果點擊收入，則自動將大分類改為最後一筆選項(收入)，相反則將其改為第一筆選項(飲食酒水)
+        data.form.isNegative = val
+        if (val) data.form.kind_parent = data.parent_options[0]?.value
+        else
+          data.form.kind_parent =
+            data.parent_options[data.parent_options.length - 1]?.value
+      },
     }
     const stopWatchEffect = watchEffect(() => {
       // watchEffect 回傳一個停止監聽的函式
-      if (data.form.kind_parent)
+      if (data.form.kind_parent) {
         methods.updateChildOptions(data.form.kind_parent)
+      }
     })
     bus.on('submit:form', () => {
       methods.submit()
