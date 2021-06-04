@@ -22,6 +22,8 @@ export default defineComponent({
     Footer,
   },
   setup() {
+    console.log(2)
+
     const state = useState()
     const router = useRouter()
 

@@ -11,7 +11,8 @@
         :key="row"
         tag="p"
         size="sm"
-        class="col-span-3 text-center  dark:text-white "
+        class="multiline-ellipsis
+        col-span-3 text-center dark:text-white"
       >
         {{ row }}
       </Text>

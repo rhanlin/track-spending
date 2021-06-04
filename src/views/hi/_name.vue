@@ -1,5 +1,8 @@
 <template>
-  <form class="m-auto rounded-lg px-8 pt-6 pb-8 overflow-y-auto">
+  <form
+    class="m-auto rounded-lg px-4 pt-6 pb-8 overflow-y-auto
+    h-screen flex flex-col justify-center"
+  >
     <div class="mb-4">
       <Text
         tag="h3"
@@ -45,32 +48,14 @@ import {
   onUnmounted,
 } from 'vue'
 import { useRouter } from 'vue-router'
-import { getData, postData } from '../../api/fetchApi'
+import { postData } from '../../api/fetchApi'
 import { useState } from '../../store/index'
+import { GoogleSheetAPIResponse } from '../../type/response'
 import bus from '../../bus'
 
 const defaultDay = new Date().toISOString().split('T')[0]
 const GOOGLE_SHEET_URL =
   'https://script.google.com/macros/s/AKfycbxgyM5XPLleto9N400wDAGO3Q8SJRuB48ZKmqsK/exec'
-
-type Content = {
-  name: string
-  content: Array<keyof GoogleSheetAPIResponse>
-}
-
-interface GoogleSheetAPIResponse {
-  // [key: string]: Content
-  food: Content
-  communication: Content
-  entertainment: Content
-  gift: Content
-  home: Content
-  insurance: Content
-  medical: Content
-  other: Content
-  'self-invest': Content
-  traffic: Content
-}
 
 interface HomepageState {
   form: {
@@ -83,7 +68,6 @@ interface HomepageState {
   }
   parent_options: SelectOption<keyof GoogleSheetAPIResponse>[]
   child_options: SelectOption<keyof GoogleSheetAPIResponse>[]
-  optionData: GoogleSheetAPIResponse
   toast: {
     isShow: boolean
     message: string
@@ -115,48 +99,6 @@ export default defineComponent({
       },
       parent_options: [],
       child_options: [],
-      optionData: {
-        food: {
-          name: '',
-          content: [],
-        },
-        communication: {
-          name: '',
-          content: [],
-        },
-        entertainment: {
-          name: '',
-          content: [],
-        },
-        gift: {
-          name: '',
-          content: [],
-        },
-        home: {
-          name: '',
-          content: [],
-        },
-        insurance: {
-          name: '',
-          content: [],
-        },
-        medical: {
-          name: '',
-          content: [],
-        },
-        other: {
-          name: '',
-          content: [],
-        },
-        'self-invest': {
-          name: '',
-          content: [],
-        },
-        traffic: {
-          name: '',
-          content: [],
-        },
-      },
       toast: {
         isShow: false,
         message: '',
@@ -197,8 +139,7 @@ export default defineComponent({
           })
       },
       updateChildOptions(val: keyof GoogleSheetAPIResponse) {
-        // console.log('val', val)
-        const currentChildOptions = data.optionData[val].content
+        const currentChildOptions = state.optionData![val].content
         data.child_options = currentChildOptions.map(item => ({
           value: item,
           label: item,
@@ -215,28 +156,22 @@ export default defineComponent({
       methods.submit()
     })
     onMounted(() => {
+      console.log(3)
+
       const userName = state.userName
       if (!userName) router.push('/')
-      updateLoadingState(true)
-      getData(`${GOOGLE_SHEET_URL}?queryType=type`)
-        .then((response: GoogleSheetAPIResponse) => {
-          data.optionData = response
 
-          for (let key in response) {
-            const keyWithType = key as keyof GoogleSheetAPIResponse
-            data.parent_options = [
-              ...data.parent_options,
-              {
-                value: keyWithType,
-                label: response[keyWithType].name,
-              },
-            ]
-          }
-        })
-        .then(() => {
-          updateLoadingState(false)
-          data.form.kind_parent = data.parent_options[0].value
-        })
+      for (let key in state.optionData) {
+        const keyWithType = key as keyof GoogleSheetAPIResponse
+        data.parent_options = [
+          ...data.parent_options,
+          {
+            value: keyWithType,
+            label: state.optionData[keyWithType].name,
+          },
+        ]
+      }
+      data.form.kind_parent = data.parent_options[0].value
     })
     onUnmounted(() => {
       stopWatchEffect()

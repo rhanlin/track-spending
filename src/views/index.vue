@@ -1,5 +1,7 @@
 <template>
-  <div class="m-auto">
+  <div
+    class="m-auto rounded-lg px-8 pt-6 pb-8 overflow-y-auto h-screen flex flex-col justify-center"
+  >
     <Icon name="home" class="h-10 w-10" />
     <p>
       <a href="https://github.com/antfu/vitesse" target="_blank">
@@ -19,6 +21,13 @@
       style="width: 100%"
       @keydown.enter="go"
     />
+    <Text
+      tag="p"
+      size="xs"
+      class="text-center mx-auto mt-4 px-3 dark:text-white"
+    >
+      {{ `版本: ${version}` }}
+    </Text>
   </div>
 </template>
 
@@ -26,6 +35,7 @@
 import { ref, onMounted, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useState } from '../store/index'
+import { version } from '../../package.json'
 import bus from '../bus'
 
 export default defineComponent({
@@ -48,6 +58,7 @@ export default defineComponent({
     })
 
     return {
+      version,
       name,
       go,
     }

@@ -34,7 +34,7 @@
               size="xl"
               class="text-center mx-auto font-bold dark:text-white text-white-700"
             >
-              首頁
+              記帳
             </Text>
           </button>
         </li>
@@ -86,6 +86,15 @@
             </Text>
           </button>
         </li>
+        <li>
+          <Text
+            tag="label"
+            size="xs"
+            class="text-center mx-auto mb-8 px-3 dark:text-white"
+          >
+            {{ `版本: ${version}` }}
+          </Text>
+        </li>
       </ul>
     </div>
   </div>
@@ -95,7 +104,7 @@
 import { defineComponent, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useState, ThemeMode } from '../store/index'
-
+import { version } from '../../package.json'
 export default defineComponent({
   props: {
     isOpen: {
@@ -135,6 +144,7 @@ export default defineComponent({
       goMainPage,
       upadteColorMode,
       colorModeTitle,
+      version,
     }
   },
 })

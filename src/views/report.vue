@@ -1,5 +1,8 @@
 <template>
-  <form class="pt-6 px-2 pb-8 overflow-y-auto grid grid-cols-12 gap-6">
+  <div
+    class="m-auto rounded-lg px-4 pt-6 pb-8 overflow-y-auto
+    h-screen flex flex-col justify-center grid grid-cols-12 gap-6"
+  >
     <div class="mb-4 col-span-12">
       <Text
         tag="h3"
@@ -19,19 +22,32 @@
           {{ col }}
         </Text>
       </div>
-      <Record
-        v-for="(item, index) in record"
-        :key="index"
-        :rowData="item.rowData"
-        :note="item.note"
-      />
+      <template v-if="record.length">
+        <Record
+          v-for="(item, index) in record"
+          :key="index"
+          :rowData="item.rowData"
+          :note="item.note"
+        />
+      </template>
+      <template v-else>
+        <div class="my-auto py-8">
+          <Text
+            tag="h3"
+            size="sm"
+            class="text-center mx-auto dark:text-white font-bold"
+          >
+            目前沒有任何紀錄
+          </Text>
+        </div>
+      </template>
     </div>
     <!-- <Toast
       v-if="toast.isShow"
       v-bind="toast"
       @update:closeToast="toast.isShow = false"
     /> -->
-  </form>
+  </div>
 </template>
 
 <script lang="ts">
@@ -40,11 +56,12 @@ import { useState } from '../store/index'
 import { useRouter } from 'vue-router'
 import { postData } from '../api/fetchApi'
 import Record from '../components/form/Record.vue'
+import { GoogleSheetAPIRecordResponse } from '../type/response'
 const GOOGLE_SHEET_URL =
   'https://script.google.com/macros/s/AKfycbxgyM5XPLleto9N400wDAGO3Q8SJRuB48ZKmqsK/exec'
 interface ReportPageState {
-  year: string
-  month: string
+  year: number
+  month: number
   record: any
   columns: string[]
 }
@@ -57,9 +74,9 @@ export default defineComponent({
       state.updateLoading(val)
     }
     const data: ReportPageState = reactive({
-      year: '',
-      month: '',
-      record: null,
+      year: 0,
+      month: 0,
+      record: [],
       columns: ['日期', '大分類', '小分類', '花費'],
     })
     const init = () => {
@@ -73,7 +90,7 @@ export default defineComponent({
         month: new Date().getMonth() + 1,
       }
       postData(`${GOOGLE_SHEET_URL}?queryType=record`, queryBody)
-        .then((response: any) => {
+        .then((response: GoogleSheetAPIRecordResponse) => {
           console.log(response)
           const { year, month, record } = response
           data.year = year
@@ -90,6 +107,9 @@ export default defineComponent({
         })
         .then(() => {
           updateLoadingState(false)
+        })
+        .catch(error => {
+          console.log('fail to fetch report data', error)
         })
     }
 

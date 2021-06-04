@@ -5,6 +5,8 @@ import App from './App.vue'
 import { stateSymbol, createState } from './store/index'
 import router from './router'
 import globalComponents from './components'
+import { version } from '../package.json'
+import { vueConsole } from './util/general'
 
 const app = createApp(App)
 
@@ -23,3 +25,4 @@ for (let i = 0; i < keysLength; i++) {
 // app.use
 
 app.mount('#app')
+vueConsole('version:', version)
