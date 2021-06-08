@@ -1,6 +1,10 @@
 <template>
-  <div v-show="isOpen" class="fixed flex flex-wrap w-2/3 h-screen z-10">
-    <div class="w-full dark:bg-gray-700 bg-gray-200 rounded p-3 shadow-lg">
+  <div
+    v-show="isOpen"
+    class="fixed flex flex-wrap w-full h-screen z-10 bg-black bg-opacity-25"
+    @click.self="$emit('update:close')"
+  >
+    <div class="w-2/3 dark:bg-gray-700 bg-gray-200 rounded p-3 shadow-lg">
       <div class="flex items-center space-x-4 p-2 mb-5">
         <Icon name="default-user" class="h-12 w-12 " />
         <div>
@@ -120,7 +124,7 @@ export default defineComponent({
       const userName = state.userName
       if (userName) router.push(`/hi/${userName}`)
 
-      emit('close')
+      emit('update:close')
     }
 
     const upadteColorMode = (mode: ThemeMode) => {
@@ -130,7 +134,7 @@ export default defineComponent({
         state.updateColorMode(ThemeMode.dark)
       }
 
-      emit('close')
+      emit('update:close')
     }
 
     const colorModeTitle = computed(() => {

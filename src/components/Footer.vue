@@ -13,7 +13,7 @@
       type="button"
       @click="busSubmit($route)"
     >
-      Go!
+      {{ centerButtonHandler($route) }}
     </button>
 
     <button
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useState, ThemeMode } from '../store/index'
 import { useRouter } from 'vue-router'
 import bus from '../bus'
@@ -57,6 +57,9 @@ export default defineComponent({
         case '_name':
           bus.emit('submit:form')
           break
+        case 'report':
+          bus.emit('go:_name')
+          break
       }
     }
 
@@ -68,11 +71,24 @@ export default defineComponent({
       }
     }
 
+    const centerButtonHandler = $route => {
+      const routeName = $route.name
+      switch (routeName) {
+        case 'index':
+          return '登入'
+        case '_name':
+          return '送出'
+        case 'report':
+          return '記帳去'
+      }
+    }
+
     return {
       state,
       busSubmit,
       goReportPage,
       upadteColorMode,
+      centerButtonHandler,
     }
   },
 })

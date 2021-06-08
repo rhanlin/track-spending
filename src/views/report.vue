@@ -1,7 +1,6 @@
 <template>
   <div
-    class="m-auto rounded-lg px-4 pt-6 pb-8 overflow-y-auto
-    h-screen flex flex-col justify-center grid grid-cols-12 gap-6"
+    class="m-auto rounded-lg px-4 pt-6 pb-8 overflow-y-auto h-screen flex flex-col justify-center grid grid-cols-12 gap-6"
   >
     <div class="mb-4 col-span-12">
       <Text
@@ -44,7 +43,7 @@
       </template>
 
       <div class="mt-8 flex items-baseline justify-end">
-        <Text tag="h5" size="base" class="text-center mr-3  dark:text-gray-300">
+        <Text tag="h5" size="base" class="text-center mr-3 dark:text-gray-300">
           花費總計:
         </Text>
         <Text
@@ -66,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent, reactive, toRefs, computed } from 'vue'
+import { onMounted, defineComponent, reactive, toRefs } from 'vue'
 import { useState } from '../store/index'
 import { useRouter } from 'vue-router'
 import { postData } from '../api/fetchApi'
@@ -75,6 +74,7 @@ import {
   GoogleSheetAPIRecordResponse,
   GoogleSheetAPIResponse,
 } from '../type/response'
+import bus from '../bus'
 const GOOGLE_SHEET_URL =
   'https://script.google.com/macros/s/AKfycbxgyM5XPLleto9N400wDAGO3Q8SJRuB48ZKmqsK/exec'
 interface ReportPageState {
@@ -148,6 +148,10 @@ export default defineComponent({
           console.log('fail to fetch report data', error)
         })
     }
+    bus.on('go:_name', () => {
+      const userName = state.userName
+      router.push(`/hi/${userName}`)
+    })
 
     onMounted(() => {
       init()

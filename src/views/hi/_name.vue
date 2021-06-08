@@ -38,11 +38,7 @@
           :color="form.isNegative ? 'text-red-600' : 'text-blue-600'"
         >
           <template v-if="form.isNegative" v-slot:prefix="">
-            <Text
-              tag="label"
-              size="sm"
-              class="block text-red-600 text-sm ml-2 mb-1"
-            >
+            <Text tag="label" size="sm" class="block text-red-600 text-sm ml-2">
               -
             </Text>
           </template>

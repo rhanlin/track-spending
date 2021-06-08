@@ -1,7 +1,11 @@
 <template>
   <div class="relative h-screen w-full text-gray-700 dark:text-gray-200">
     <Loading :isLoading="state.loading" />
-    <Navigation :isOpen="navIsOpen" @logout="back" @close="navIsOpen = false" />
+    <Navigation
+      :isOpen="navIsOpen"
+      @logout="back"
+      @update:close="navIsOpen = false"
+    />
     <router-view class="view" />
     <Footer @update:isOpen="navIsOpen = !navIsOpen" />
   </div>
